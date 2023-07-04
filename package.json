@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "webpack --config ./webpack.config.js",
+    "build": "webpack --config ./scripts/webpack.config.server.js",
     "start": "npm run build && node ./dist/main-bundle.js",
     "_start": "node ./dist/main-bundle.js"
   },
