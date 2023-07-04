@@ -21,10 +21,8 @@ export class OpenaiConfigurationProvider {
     // [public methods]
 
     public async build(): Promise<OpenaiConfiguration> {
-    
         const configuration = await this.__readConfiguration(this._path);
-        console.log(configuration); // REVIEW
-    
+
         return new OpenaiConfiguration({
             apiKey: configuration.OPENAI_API_KEY,
         });
