@@ -1,26 +1,52 @@
-import { Openai } from "src/server/openai/openai";
+import { AIService, IAIService } from "src/server/service";
+import { Disposable } from "src/base/common/dispose";
+import { Browser, IBrowser } from "src/server/web";
 
-const server = new class extends class Server {
+const server = new class extends class Server extends Disposable {
 
     // [constructor]
 
-    constructor() {}
+    constructor() {
+        super();
+        this.__registerListeners();
+    }
 
     // [public methods]
 
     public async run(): Promise<void> {
-        const openai = new Openai({
+        const openai = await this.initOpenai();
+        const browser = await this.initBrowser();
+    }
+
+    public exit(): void {
+        this.dispose();
+    }
+
+    // [private helper methods]
+
+    private async initOpenai(): Promise<IAIService> {
+        const openai = new AIService({
             configurationPath: 'server.config.json',
         });
         
-        const chat_completion = await openai.api.createChatCompletion({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: "Hello world" }],
-        });
-    
-        console.log(chat_completion.data.choices[0]!); // REVIEW
+        await openai.init();
+        return openai;
     }
-} {};
+
+    private async initBrowser(): Promise<IBrowser> {
+        const browser = new Browser({
+            port: 3000,
+        });
+
+        await browser.init();
+        return browser;
+    }
+
+    private __registerListeners(): void {
+        // TODO: exit listeners
+    }
+} 
+{};
 
 /**
  * hello there, my friend❤

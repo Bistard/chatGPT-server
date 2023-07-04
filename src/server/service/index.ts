@@ -1,11 +1,11 @@
 import { Disposable } from "src/base/common/dispose";
 import { OpenAIApi } from "openai";
-import { OpenaiConfigurationProvider } from "src/server/openai/configuration";
+import { OpenaiConfigurationProvider } from "src/server/service/configuration";
 
 /**
- * An interface only for {@link Openai}.
+ * An interface only for {@link AIService}.
  */
-export interface IOpenai extends Disposable {
+export interface IAIService extends Disposable {
     
     /**
      * Access to the raw openai API.
@@ -19,16 +19,16 @@ export interface IOpenai extends Disposable {
 }
 
 /**
- * Construction options for {@link openai}.
+ * Construction options for {@link AIService}.
  */
-export interface OpenaiOptions  {
+export interface AIServiceOptions  {
     readonly configurationPath: string;
 }
 
 /**
  * // TODO
  */
-export class Openai extends Disposable implements IOpenai {
+export class AIService extends Disposable implements IAIService {
     
     // [fields]
 
@@ -38,7 +38,7 @@ export class Openai extends Disposable implements IOpenai {
 
     // [constructor]
 
-    constructor(options: OpenaiOptions) {
+    constructor(options: AIServiceOptions) {
         super();
         this._initialized = false;
         this._configuration = new OpenaiConfigurationProvider(options.configurationPath);
@@ -48,7 +48,7 @@ export class Openai extends Disposable implements IOpenai {
 
     get api(): OpenAIApi {
         if (!this._initialized || !this._api) {
-            throw new Error('[Openai] not intialized.');
+            throw new Error('[AIService] not intialized.');
         }
         return this._api;
     }
@@ -57,7 +57,7 @@ export class Openai extends Disposable implements IOpenai {
 
     public async init(): Promise<void> {
         if (this._initialized) {
-            throw new Error('[Openai] cannot be initialized twice.');
+            throw new Error('[AIService] cannot be initialized twice.');
         }
         this._initialized = true;
 
