@@ -1,5 +1,5 @@
-import { Disposable } from "src/base/common/dispose";
 import express from 'express';
+import { Disposable } from "src/base/common/dispose";
 
 /**
  * An interface for {@link Browser}.
@@ -18,6 +18,11 @@ export interface IBrowserOptions {
      * The port number.
      */
     readonly port: number;
+
+    /**
+     * The path to the front-end static files.
+     */
+    readonly static: string;
 }
 
 export class Browser extends Disposable implements IBrowser {
@@ -38,13 +43,12 @@ export class Browser extends Disposable implements IBrowser {
     public async init(): Promise<void> {
         const app = express();
         const port = this._opts.port;
-
-        app.get('/', (req, res) => {
-        res.send('Hello World!')
-        });
+        
+        // binding to the html
+        app.use(express.static(this._opts.static));
 
         app.listen(port, () => {
-            console.log(`Server is listening at http://localhost:${port}`)
+            console.log(`Server is listening at http://localhost:${port}`);
         });
     }
 }
