@@ -36,7 +36,7 @@ const server = new class extends class Server extends Disposable {
     private async initBrowser(): Promise<IBrowser> {
         const browser = new Browser({
             port: 3000,
-            static: 'src/browser',
+            static: './',
         });
 
         await browser.init();
